@@ -23,6 +23,11 @@ const apolloClient = new ApolloClient({
 
 const apolloProvider = createApolloProvider({
   defaultClient: apolloClient,
+  defaultOptions: {
+    $query: {
+      fetchPolicy: 'cache-and-network',
+    },
+  },
 });
 
 createApp(App)
