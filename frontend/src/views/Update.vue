@@ -82,9 +82,7 @@ export default {
           this.$router.push({ name: 'Home' });
         })
         .catch((error) => {
-          const key = Object.keys(error.graphQLErrors[0].extensions.validation)[0];
-          // eslint-disable-next-line prefer-destructuring
-          this.error = error.graphQLErrors[0].extensions.validation[key][0];
+          this.error = error.graphQLErrors[0].message;
         });
     },
   },

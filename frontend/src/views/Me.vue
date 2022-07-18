@@ -5,6 +5,7 @@
         <div v-if="me">
             <div>{{ me.name }}</div>
             <div> {{ me.email }}</div>
+            <div>Is admin: {{ me.is_admin }}</div>
         </div>
     </div>
 </template>
@@ -25,6 +26,7 @@ export default {
           me {
             name
             email
+            is_admin
           }
         }
       `,
