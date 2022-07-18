@@ -15,8 +15,23 @@ import gql from 'graphql-tag';
 export default {
   components: {
   },
+  watch: {
+    me(newMe) {
+      if (!newMe.is_admin) {
+        window.location.href = '/';
+      }
+    },
+  },
   apollo: {
-  // Simple query that will update the 'hello' vue property
+    me: {
+      query: gql`
+        query {
+          me {
+            is_admin
+          }
+        }
+      `,
+    },
     users: {
       query: gql`
         query {

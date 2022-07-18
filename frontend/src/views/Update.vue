@@ -37,10 +37,23 @@ export default {
     post(newPost) {
       this.title = newPost.title;
       this.body = newPost.body;
+
+      if (newPost.user.id !== this.me.id) {
+        window.location.href = '/';
+      }
     },
   },
   apollo: {
-  // Simple query that will update the 'hello' vue property
+    me: {
+      query: gql`
+        query {
+          me {
+            id
+          }
+        }
+      `,
+    },
+    // Simple query that will update the 'hello' vue property
     post: {
       query: gql`
         query getPost($id: ID!){
@@ -48,6 +61,9 @@ export default {
             id
             title
             body
+            user {
+              id
+            }
           }
         }
       `,

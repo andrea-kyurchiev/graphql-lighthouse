@@ -10,12 +10,14 @@
     <div v-else>
       No post found
     </div>
-    <div>
-      <router-link :to="{ name:'Update', params: { id: $route.params.id} }">
-        Update
-      </router-link>
+    <div v-if="post.user.id === me.id">
+      <div>
+        <router-link :to="{ name:'Update', params: { id: $route.params.id} }">
+          Update
+        </router-link>
+      </div>
+      <button @click="deletePost">Delete Post</button>
     </div>
-    <button @click="deletePost">Delete Post</button>
   </div>
 </template>
 
@@ -31,7 +33,16 @@ export default {
     };
   },
   apollo: {
-  // Simple query that will update the 'hello' vue property
+    me: {
+      query: gql`
+        query {
+          me {
+            id
+          }
+        }
+      `,
+    },
+    // Simple query that will update the 'hello' vue property
     post: {
       query: gql`
         query getPost($id: ID!){
@@ -39,6 +50,9 @@ export default {
             id
             title
             body
+            user {
+              id
+            }
           }
         }
       `,

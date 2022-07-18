@@ -47,7 +47,7 @@ export default {
       })
         .then((data) => {
           localStorage.setItem('apollo-token', data.data.login.token);
-          this.$router.push({ name: 'Me' });
+          window.location.href = '/me';
         })
         .catch((error) => {
           //   const key = Object.keys(error.graphQLErrors[0].extensions.validation)[0];

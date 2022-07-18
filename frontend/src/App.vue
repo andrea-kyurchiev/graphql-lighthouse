@@ -1,12 +1,13 @@
 <template>
   <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link> |
-    <router-link to="/create">Create</router-link> |
-    <router-link to="/me">Me</router-link> |
-    <router-link to="/login">Login</router-link> |
-    <router-link to="/register">Register</router-link> |
-    <a href="#" @click.prevent="logout">Logout</a>
+    <router-link to="/">Home</router-link>
+    <router-link to="/about">About</router-link>
+    <router-link v-if="loggedIn" to="/create">Create</router-link>
+    <router-link v-if="loggedIn" to="/me">Me</router-link>
+    <router-link v-if="loggedIn && me?.is_admin" to="/admin">Admin</router-link>
+    <router-link v-if="!loggedIn" to="/register">Register</router-link>
+    <router-link v-if="!loggedIn" to="/login">Login</router-link>
+    <a href="#" v-if="loggedIn" @click.prevent="logout">Logout</a>
   </div>
   <router-view/>
 </template>
@@ -15,6 +16,22 @@
 import gql from 'graphql-tag';
 
 export default {
+  computed: {
+    loggedIn() {
+      return localStorage.getItem('apollo-token');
+    },
+  },
+  apollo: {
+    me: {
+      query: gql`
+        query {
+          me {
+            is_admin
+          }
+        }
+      `,
+    },
+  },
   methods: {
     logout() {
       this.$apollo.mutate({
@@ -29,7 +46,7 @@ export default {
         .then((data) => {
           console.log(data);
           localStorage.removeItem('apollo-token');
-          this.$router.push({ name: 'Home' });
+          window.location.href = '/';
         })
         .catch((error) => {
           console.log(error.graphQLErrors);
@@ -60,6 +77,7 @@ export default {
   a {
     font-weight: bold;
     color: #2c3e50;
+    margin-right: 20px;
 
     &.router-link-exact-active {
       color: #42b983;
